@@ -1,1 +1,13 @@
 Projet Python Space Invador Terminal
+
+- Ajout point de vie 
+- Ajout Interface Score + Pts de vie 
+- Passage sous la map = - 1 pts de vie + (- 5 de scores) 
+- Ajout des sprites fait à la main
+- Ajout de Font + Musique 
+- Mise en place d'un game over
+- mise en place des musiques correspondant au event
+- ajout Image coeur 
+- Spécification 
+
+... 
