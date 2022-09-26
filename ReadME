@@ -1,5 +1,29 @@
 Projet Python Space Invador Terminal
 
+NSI - Projet 
+Instructions de projet
+L'objectif de ce projet est de réaliser un jeu "Space Invader" en langage Python avec Pygame.
+
+Le jeu
+1. Le vaisseau du joueur
+    * se déplace horizontalement sur  la fenêtre graphique (en bas) à l'aide des flèches du clavier.
+    * tire une balle pour détruire le vaisseau ennemi.
+2. Le vaisseau ennemi
+    * apparaît en haut de la fenêtre graphique : horizontalement, sa position est aléatoire.
+    * descend selon sa vitesse
+3. Le vaisseau du joueur tire une balle à la fois pour détruire le vaisseau ennemi.
+4. Si le vaisseau ennemi est touché, il disparaît.
+5. Dès qu'un vaisseau ennemi arrive en bas de la fenêtre graphique ou est détruit, un nouveau vaisseau ennemi apparaît en haut de la fenêtre graphique.
+6. « Si le vaisseau ennemi percute le vaisseau du joueur, celui-ci explose et disparaît : c'est la fin de la partie. » 
+    - [ ] A FAIRE
+7. Améliorations possibles :
+    * affichage du score du joueur X
+    * le joueur a plusieurs vies X
+    * les vaisseaux ennemis vont de plus en plus vite X (pas interessant donc supprimer)
+    * il y a plusieurs vaisseaux ennemis simultanément X
+    * les vaisseaux ennemis lâchent des bombes pour détruire le joueur, le joueur peut détruire les bombes en tirant des balles
+    * écran de fin : possibilité de rejouer... 
+///
 - Ajout point de vie 
 - Ajout Interface Score + Pts de vie 
 - Passage sous la map = - 1 pts de vie + (- 5 de scores) 
