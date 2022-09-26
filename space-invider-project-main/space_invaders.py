@@ -17,7 +17,7 @@ fond = pygame.image.load('background.png')
 fond = pygame.transform.scale(fond, (800, 600))
 # creation du joueur
 player = space.Joueur()
-# Affichage d'un texte en hat à gauche de l'écran avec le score du joeur
+# Affichage d'un texte en hat à gauche de l'écran avec le score du joueur
 font = pygame.font.Font(None, 36)
 clock = pygame.time.Clock()
 # creation de la balle
@@ -27,6 +27,9 @@ GENERER_ENNEMIS = pygame.USEREVENT + 1
 # jouez de la musique
 bruitage = pygame.mixer.Sound("musique.mp3")
 bruitage.play()
+over = pygame.mixer.Sound("Over.mp3")
+over.set_volume(0.2)
+
 # creation des ennemis
 listeEnnemis = []
 for indice in range(space.Ennemi.NbEnnemis):
@@ -34,10 +37,13 @@ for indice in range(space.Ennemi.NbEnnemis):
     listeEnnemis.append(vaisseau)
 # ajout de deux def pour les textes
 def game_over_text():
-    over_text = over_font.render("GAME OVER", True, (255,255,255))
+    """Permet d'initialisée la font pour l'evenement Game Over"""
+    over_text = over_font.render("GAME OVER", True, (240, 0, 32))
     text_rect = over_text.get_rect(center=(800/2, 400/2))
     screen.blit(over_text, text_rect)
 def resource_path(relative_path):
+    """Permet de rechercher une ressource en renvoyant (base_path, relative_path) on l'utilisera pour crée des font
+depuis des fichiers externes"""
     try:
     # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path = sys._MEIPASS
@@ -65,9 +71,10 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
     textpos.left = 10
     textpos.top = 10
     screen.blit(text, textpos)
-    if player.score < -49:
+    if player.deplacer() == True:
         game_over_text()
-        running= False
+        bruitage.stop()
+        over.play()
     ### Gestion des événements  ###
     for event in pygame.event.get():  # parcours de tous les event pygame dans cette fenêtre
         if event.type == pygame.QUIT:  # si l'événement est le clic sur la fermeture de la fenêtre
@@ -113,4 +120,5 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
 
 
     pygame.display.update()  # pour ajouter tout changement à l'écran
+
 

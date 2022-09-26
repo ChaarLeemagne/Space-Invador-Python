@@ -4,21 +4,22 @@ import random
 # import de la bibliothèque math pour les fonctions mathematiques
 import math
 
-        
 class Joueur:  # classe pour créer le vaisseau du joueur
     def __init__(self):
         """
         Constructeur de la classe Joueur
         :return:
         """
-        self.position = 400
+        self.position = 380
         self.hauteur = 0
         self.depart = self.position
         self.image = pygame.image.load('vaisseau.png')
         self.image = pygame.transform.scale(self.image, (80, 90))
         self.sens = "O"
-        self.vitesse = 5
+        self.vitesse = 3
         self.score = 0
+        self.Vlives = 5
+        
 
 
     def deplacer(self):
@@ -26,12 +27,19 @@ class Joueur:  # classe pour créer le vaisseau du joueur
         Fonction qui permet de déplacer le vaisseau du joueur
         :return:
         """
-        if (self.sens == "droite") and (self.position < 740):
-            self.position = self.position + self.vitesse
-            self.depart = self.position
-        elif (self.sens == "gauche") and (self.position > 0):
-            self.position = self.position - self.vitesse
-            self.depart = self.position
+        global verif
+        verif= False
+        if self.Vlives > 0 :
+            if (self.sens == "droite") and (self.position < 740):
+                self.position = self.position + self.vitesse
+                self.depart = self.position
+            elif (self.sens == "gauche") and (self.position > 0):
+                self.position = self.position - self.vitesse
+                self.depart = self.position
+        else :
+            self.position = 380
+            verif= True
+            return verif
 
     def tirer(self):
         """
@@ -54,13 +62,13 @@ class Joueur:  # classe pour créer le vaisseau du joueur
         """
         self.score = self.score - 5
 
-
 class Balle:  # classe pour créer la balle
     def __init__(self, player):
         """
         Constructeur de la classe Balle
         :param player:
         """
+        self.verif = player.deplacer()
         self.tireur = player
         self.depart = player.position + 16
         self.hauteur = 492
@@ -74,15 +82,20 @@ class Balle:  # classe pour créer la balle
         Fonction pour faire bouger la balle
         :return:
         """
-        if self.etat == "chargee":
-            self.depart = self.tireur.position + 16
+        global verif
+        if verif == False :
+            if self.etat == "chargee":
+                self.depart = self.tireur.position + 16
+                self.hauteur = 492
+            elif self.etat == "tiree":
+                self.hauteur = self.hauteur - self.vitesse
+            if self.hauteur < 0:
+                self.etat = "chargee"
+        else :
+            self.depart = 380 + 16
             self.hauteur = 492
-        elif self.etat == "tiree":
-            self.hauteur = self.hauteur - self.vitesse
-        if self.hauteur < 0:
-            self.etat = "chargee"
+            pass
         
-
     def toucher(self, vaisseau):
         """
         Fonction qui permet de savoir si la balle touche un ennemi
@@ -124,32 +137,41 @@ class Ennemi:
         Avance l'ennemi d'une distance égale à sa vitesse
         :return:
         """
-        self.hauteur = self.hauteur + self.vitesse
-
+        global verif
+        if verif == False :
+            self.hauteur = self.hauteur + self.vitesse
+        else :
+            pass
     def disparaitre(self):
         """
         Fait disparaitre l'ennemi
         :return:
         """
-        self.depart = random.randint(1, 700)
-        self.hauteur = 10
-        self.type = random.randint(1, 2)
-        if self.type == 1:
-            self.image = pygame.image.load('invader1.png')
-            self.image = pygame.transform.scale(self.image, (80, 90))
-            self.vitesse = 1
-        elif self.type == 2:
-            self.image = pygame.image.load('invader2.png')
-            self.image = pygame.transform.scale(self.image, (80, 90))
-            self.vitesse = 2
-
+        global verif
+        if verif == False :
+            self.depart = random.randint(1, 700)
+            self.hauteur = 10
+            self.type = random.randint(1, 2)
+            if self.type == 1:
+                self.image = pygame.image.load('invader1.png')
+                self.image = pygame.transform.scale(self.image, (80, 90))
+                self.vitesse = 1
+            elif self.type == 2:
+                self.image = pygame.image.load('invader2.png')
+                self.image = pygame.transform.scale(self.image, (80, 90))
+                self.vitesse = 2
+        else :
+            pass   
     def touchPlayer(self, player):
         """
         Fonction qui permet d'appeler demarquer si l'ennemie touche le joueur ou alors passe en dessous de la fenêtre
         :param player:
         :return:
         """
-        if self.hauteur >= 600 :
-            player.demarquer()
-
-    
+        global verif
+        if verif == False :
+            if self.hauteur >= 600 :
+                player.demarquer()
+                player.Vlives = player.Vlives - 1
+        else :
+            pass     
