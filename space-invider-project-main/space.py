@@ -76,6 +76,7 @@ class Balle:  # classe pour créer la balle
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.etat = "chargee"
         self.vitesse = 7
+        
 
     def bouger(self):
         """
@@ -96,7 +97,7 @@ class Balle:  # classe pour créer la balle
             self.hauteur = 492
             pass
         
-    def toucher(self, vaisseau):
+    def toucher(self, vaisseau, player):
         """
         Fonction qui permet de savoir si la balle touche un ennemi
         :param vaisseau : vaisseau ennemi
@@ -111,6 +112,7 @@ class Balle:  # classe pour créer la balle
             bruitage2 = pygame.mixer.Sound("explosion.wav")
             bruitage2.play()
             bruitage2.set_volume(0.1)
+            player.Vlives += 1
             return True
 
 class Ennemi:
@@ -174,4 +176,12 @@ class Ennemi:
                 player.demarquer()
                 player.Vlives = player.Vlives - 1
         else :
-            pass     
+            pass
+        
+class AfficherVlives():
+    def __init_(self, player):
+        self.Vlives = player.Vlives
+        self.font = pygame.font.Font('\RAVIE.ttf', 32)
+
+    def affiche(self, player):
+        font.render({player.Vlives}, True, (255, 0, 255))

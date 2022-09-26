@@ -57,6 +57,9 @@ asset_font = resource_path('.\RAVIE.ttf')
 font = pygame.font.Font(asset_font,40)
 asset_over_font = resource_path('.\comicbd.ttf')
 over_font = pygame.font.Font(asset_over_font,60)
+#image coeur
+coeur = pygame.image.load('coeur.png')
+coeur = pygame.transform.scale(coeur, (40, 45))
 ### BOUCLE DE JEU  ###
 # appel de l'evenement GENERER_ENNEMIS toutes les 5 secondes
 running = True  # variable pour laisser la fenêtre ouverte
@@ -71,7 +74,10 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
     textpos.left = 10
     textpos.top = 10
     screen.blit(text, textpos)
-    if player.deplacer() == True:
+    text2 = font.render(f"{player.Vlives}", 1, (255, 255, 255))
+    screen.blit(text2, [640, 10])
+    screen.blit(coeur, (690, 10))
+    if player.deplacer() == True or player.score < -100:
         game_over_text()
         bruitage.stop()
         over.play()
@@ -94,7 +100,7 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
 
     # Gestions des collisions
     for ennemi in listeEnnemis:
-        if tir.toucher(ennemi):
+        if tir.toucher(ennemi,player):
             ennemi.disparaitre()
             player.marquer()
         # si l'ennemi touche le joueur on perd 10 sur la variable player.score
