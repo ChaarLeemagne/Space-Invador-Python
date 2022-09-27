@@ -22,7 +22,7 @@ Le jeu
     * les vaisseaux ennemis vont de plus en plus vite X (pas interessant donc supprimer)
     * il y a plusieurs vaisseaux ennemis simultanément X
     * les vaisseaux ennemis lâchent des bombes pour détruire le joueur, le joueur peut détruire les bombes en tirant des balles
-    * écran de fin : possibilité de rejouer... 
+    * écran de fin : possibilité de rejouer... X
 ///
 - Ajout point de vie 
 - Ajout Interface Score + Pts de vie 
