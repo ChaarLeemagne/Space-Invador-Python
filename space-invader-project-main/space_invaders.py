@@ -17,6 +17,8 @@ pygame.display.set_icon(programIcon)
 # chargement de l'image de fond
 fond = pygame.image.load('background.png')
 fond = pygame.transform.scale(fond, (800, 600))
+fond2 = pygame.image.load('background2.jpg')
+fond2 = pygame.transform.scale(fond2, (800, 600))
 
 # Affichage d'un texte en hat à gauche de l'écran avec le score du joueur
 font = pygame.font.Font(None, 36)
@@ -25,6 +27,7 @@ clock = pygame.time.Clock()
 # jouez de la musique
 bruitage = pygame.mixer.Sound("musique.mp3")
 bruitage.play()
+ascenseur = pygame.mixer.Sound("ascenseur.mp3")
 over = pygame.mixer.Sound("Over.mp3")
 over.set_volume(0.2)
 
@@ -69,9 +72,23 @@ coeur = pygame.image.load('coeur.png')
 coeur = pygame.transform.scale(coeur, (40, 45))
 ### BOUCLE DE JEU  ###
 # appel de l'evenement GENERER_ENNEMIS toutes les 5 secondes
-running = True  # variable pour laisser la fenêtre ouverte
+running = False  # variable pour laisser la fenêtre ouverte
+verif = True
+a = True
 clock.tick(80)
-
+while a :
+    screen.blit(fond2, (0, 0))
+    over_text3 = font.render("Press Space For Start", 1, (255, 255, 255))
+    text_rect3 = over_text3.get_rect(center=(400, 300))
+    screen.blit(over_text3, text_rect3)
+    ascenseur.play()
+    for event in pygame.event.get(): # parcours de tous les event pygame dans cette fenêtre
+        if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
+            if event.key == pygame.K_SPACE:
+                a= False# si la touche est la barre espace
+                running= True
+                ascenseur.stop()
+    pygame.display.update()
 while running:  # boucle infinie pour laisser la fenêtre ouverte
     # dessin du fond
     screen.blit(fond, (0, 0))
@@ -89,19 +106,17 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
             bruitage.stop()
             over.play()
     ### Gestion des événements  ###
-    for event in pygame.event.get():  # parcours de tous les event pygame dans cette fenêtre
+    for event in pygame.event.get(): # parcours de tous les event pygame dans cette fenêtre
         if event.type == pygame.QUIT:  # si l'événement est le clic sur la fermeture de la fenêtre
             running = False  # running est sur False
             sys.exit()  # pour fermer correctement
         if player.deplacer() == True or player.score < -100:
             if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
                 if event.key == pygame.K_SPACE:  # si la touche est la barre espace
-                    print("jouez")
                     player.Vlives = 5
                     vaisseau.disparaitre()
                     vaisseau.depart = random.randint(1, 700)
                     vaisseau.hauteur = 10
-                    vaisseau.type = random.randint(1, 2)
                     verif= False
                     player.score = 5
                     over.stop()
