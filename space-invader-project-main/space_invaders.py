@@ -3,6 +3,8 @@ import space
 import sys  # pour fermer correctement l'application
 import threading # pour générer les nouveaux ennemis toutes les 5 secondes
 import os
+# import de la bibliothèque random pour les nombres aleatoires
+import random
 # lancement des modules inclus dans pygame
 pygame.init()
 
@@ -40,9 +42,12 @@ GENERER_ENNEMIS = pygame.USEREVENT + 1
 # ajout de deux def pour les textes
 def game_over_text():
     """Permet d'initialisée la font pour l'evenement Game Over"""
-    over_text = over_font.render("GAME OVER", True, (240, 0, 32))
+    over_text = over_font.render("GAME OVER", 1, (240, 0, 32))
     text_rect = over_text.get_rect(center=(800/2, 400/2))
     screen.blit(over_text, text_rect)
+    over_text2 = font.render("Press Space For Restart", 1, (255, 255, 255))
+    text_rect2 = over_text.get_rect(center=(250, 300))
+    screen.blit(over_text2, text_rect2)
 def resource_path(relative_path):
     """Permet de rechercher une ressource en renvoyant (base_path, relative_path) on l'utilisera pour crée des font
 depuis des fichiers externes"""
@@ -80,15 +85,27 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
     screen.blit(text2, [640, 10])
     screen.blit(coeur, (690, 10))
     if player.deplacer() == True or player.score < -100:
-        game_over_text()
-        bruitage.stop()
-        over.play()
+            game_over_text()
+            bruitage.stop()
+            over.play()
     ### Gestion des événements  ###
     for event in pygame.event.get():  # parcours de tous les event pygame dans cette fenêtre
         if event.type == pygame.QUIT:  # si l'événement est le clic sur la fermeture de la fenêtre
             running = False  # running est sur False
             sys.exit()  # pour fermer correctement
-
+        if player.deplacer() == True or player.score < -100:
+            if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
+                if event.key == pygame.K_SPACE:  # si la touche est la barre espace
+                    print("jouez")
+                    player.Vlives = 5
+                    vaisseau.disparaitre()
+                    vaisseau.depart = random.randint(1, 700)
+                    vaisseau.hauteur = 10
+                    vaisseau.type = random.randint(1, 2)
+                    verif= False
+                    player.score = 5
+                    over.stop()
+                    bruitage.play()
         # gestion du clavier
         if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
             if event.key == pygame.K_LEFT:  # si la touche est la fleche gauche
@@ -108,7 +125,7 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
         # si l'ennemi touche le joueur on perd 10 sur la variable player.score
         if ennemi.touchPlayer(player):
             ennemi.disparaitre()
-
+    
     # placement des objets
     # le joueur
     player.deplacer()

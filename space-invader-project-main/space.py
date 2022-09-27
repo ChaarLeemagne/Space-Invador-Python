@@ -68,7 +68,6 @@ class Balle:  # classe pour créer la balle
         Constructeur de la classe Balle
         :param player:
         """
-        self.verif = player.deplacer()
         self.tireur = player
         self.depart = player.position + 16
         self.hauteur = 492
@@ -125,7 +124,7 @@ class Balle:  # classe pour créer la balle
                 player.score -=10
 
 class Ennemi:
-    NbEnnemis = random.randint(1, 4)
+    NbEnnemis = random.randint(1, 6)
 
     def __init__(self):
         """
