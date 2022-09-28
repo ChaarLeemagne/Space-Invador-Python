@@ -21,7 +21,6 @@ class Joueur:  # classe pour créer le vaisseau du joueur
         self.Vlives = 5
         
 
-
     def deplacer(self):
         """
         Fonction qui permet de déplacer le vaisseau du joueur
@@ -30,14 +29,14 @@ class Joueur:  # classe pour créer le vaisseau du joueur
         global verif
         verif= False
         if self.Vlives > 0 :
-            if (self.sens == "droite") and (self.position < 740):
+            if (self.sens == "droite") and (self.position < 710):
                 self.position = self.position + self.vitesse
                 self.depart = self.position
             elif (self.sens == "gauche") and (self.position > 0):
                 self.position = self.position - self.vitesse
                 self.depart = self.position
         else :
-            self.position = 380
+            self.position = 380 
             verif= True
             return verif
 
@@ -72,7 +71,7 @@ class Balle:  # classe pour créer la balle
         self.depart = player.position + 16
         self.hauteur = 492
         self.image = pygame.image.load('balle.png')
-        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.image = pygame.transform.scale(self.image, (120, 60))
         self.etat = "chargee"
         self.vitesse = 7
         
@@ -124,7 +123,7 @@ class Balle:  # classe pour créer la balle
                 player.score -=10
 
 class Ennemi:
-    NbEnnemis = random.randint(1, 6)
+    NbEnnemis = random.randint(2, 6)
 
     def __init__(self):
         """
@@ -193,3 +192,11 @@ class AfficherVlives():
 
     def affiche(self, player):
         font.render({player.Vlives}, True, (255, 0, 255))
+        
+class EasterEgg():
+    def sprite1(player, tir):
+        if player.score == 2 :
+            player.image = pygame.image.load('vaisseauS.png')
+            player.image = pygame.transform.scale(player.image, (80, 60))
+            tir.image = pygame.image.load('balleS.png')
+            tir.image = pygame.transform.scale(tir.image, (80, 40))            

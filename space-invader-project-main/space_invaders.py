@@ -26,21 +26,29 @@ clock = pygame.time.Clock()
 
 # jouez de la musique
 bruitage = pygame.mixer.Sound("musique.mp3")
-bruitage.play()
 ascenseur = pygame.mixer.Sound("ascenseur.mp3")
 over = pygame.mixer.Sound("Over.mp3")
 over.set_volume(0.2)
 
 # creation des ennemis
 listeEnnemis = []
+listeBalles= []
 for indice in range(space.Ennemi.NbEnnemis):
     vaisseau = space.Ennemi()
     listeEnnemis.append(vaisseau)
 # creation du joueur
 player = space.Joueur(vaisseau)
-# creation de la balle
-tir = space.Balle(player)
-tir.etat = "chargee"
+for i in range(2) :
+    if i == 0 : 
+        tir2 = space.Balle(player)
+        tir2.etat = "chargee"
+        listeBalles.append(tir2)
+        
+    if i == 1:
+        tir3 = space.Balle(player)
+        tir3.etat = "chargee"
+        listeBalles.append(tir3)
+
 GENERER_ENNEMIS = pygame.USEREVENT + 1
 # ajout de deux def pour les textes
 def game_over_text():
@@ -75,19 +83,24 @@ coeur = pygame.transform.scale(coeur, (40, 45))
 running = False  # variable pour laisser la fenêtre ouverte
 verif = True
 a = True
-clock.tick(80)
+clock.tick(90)
 while a :
     screen.blit(fond2, (0, 0))
     over_text3 = font.render("Press Space For Start", 1, (255, 255, 255))
     text_rect3 = over_text3.get_rect(center=(400, 300))
     screen.blit(over_text3, text_rect3)
     ascenseur.play()
-    for event in pygame.event.get(): # parcours de tous les event pygame dans cette fenêtre
+    ascenseur.set_volume(0.2)
+    for event in pygame.event.get():# parcours de tous les event pygame dans cette fenêtre
+        if event.type == pygame.QUIT:  # si l'événement est le clic sur la fermeture de la fenêtre
+            running = False  # running est sur False
+            sys.exit()  # pour fermer correctement
         if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
             if event.key == pygame.K_SPACE:
                 a= False# si la touche est la barre espace
                 running= True
                 ascenseur.stop()
+                bruitage.play()
     pygame.display.update()
 while running:  # boucle infinie pour laisser la fenêtre ouverte
     # dessin du fond
@@ -100,11 +113,17 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
     screen.blit(text, textpos)
     text2 = font.render(f"{player.Vlives}", 1, (255, 255, 255))
     screen.blit(text2, [640, 10])
-    screen.blit(coeur, (690, 10))
+    screen.blit(coeur, (700, 10))
+    """if player.score == 2 :
+        for tir in listeBalles : 
+            space.EasterEgg.sprite1(player, tir)"""
+
     if player.deplacer() == True or player.score < -100:
             game_over_text()
             bruitage.stop()
             over.play()
+            listeEnnemis = [] #on réecrit la list pour faire depop les ennemis
+            
     ### Gestion des événements  ###
     for event in pygame.event.get(): # parcours de tous les event pygame dans cette fenêtre
         if event.type == pygame.QUIT:  # si l'événement est le clic sur la fermeture de la fenêtre
@@ -113,41 +132,46 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
         if player.deplacer() == True or player.score < -100:
             if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
                 if event.key == pygame.K_SPACE:  # si la touche est la barre espace
-                    player.Vlives = 5
-                    vaisseau.disparaitre()
-                    vaisseau.depart = random.randint(1, 700)
-                    vaisseau.hauteur = 10
+                    player.Vlives = 5 # on redonne 5 lives 
                     verif= False
-                    player.score = 5
+                    player.score = 0
                     over.stop()
                     bruitage.play()
+                    for indice in range(space.Ennemi.NbEnnemis): # on recrée les ennemis
+                        vaisseau = space.Ennemi()
+                        listeEnnemis.append(vaisseau)
         # gestion du clavier
         if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
             if event.key == pygame.K_LEFT:  # si la touche est la fleche gauche
                 player.sens = "gauche"  # on déplace le vaisseau de 1 pixel sur la gauche
             if event.key == pygame.K_RIGHT:  # si la touche est la fleche droite
                 player.sens = "droite"  # on déplace le vaisseau de 1 pixel sur la gauche
-            if event.key == pygame.K_SPACE:  # espace pour tirer
+            if event.key == pygame.K_SPACE :
                 player.tirer()
-                tir.etat = "tiree"
+                tir2.etat = "tiree"
+            if event.key == pygame.K_UP :
+                player.tirer()
+                tir3.etat = "tiree"
     ### Actualisation de la scene ###
 
     # Gestions des collisions
     for ennemi in listeEnnemis:
-        if tir.toucher(ennemi,player):
-            ennemi.disparaitre()
-            player.marquer()
-        # si l'ennemi touche le joueur on perd 10 sur la variable player.score
-        if ennemi.touchPlayer(player):
-            ennemi.disparaitre()
+        for tir in listeBalles:
+            if tir.toucher(ennemi,player):
+                ennemi.disparaitre()
+                player.marquer()
+            # si l'ennemi touche le joueur on perd 10 sur la variable player.score
+            if ennemi.touchPlayer(player):
+                ennemi.disparaitre()
     
     # placement des objets
     # le joueur
     player.deplacer()
-    screen.blit(tir.image, [tir.depart, tir.hauteur])  # appel de la fonction qui dessine le vaisseau du joueur
-    # la balle
-    tir.bouger()
     screen.blit(player.image, [player.position, 500])  # appel de la fonction qui dessine le vaisseau du joueur
+    for tir in listeBalles :
+        tir.bouger()
+        screen.blit(tir.image,[tir.depart, tir.hauteur])
+
     # les ennemis
     for ennemi in listeEnnemis:
         ennemi.avancer()
@@ -157,7 +181,6 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
             ennemi.disparaitre()
             ennemi.avancer()
     
-
 
     pygame.display.update()  # pour ajouter tout changement à l'écran
 
