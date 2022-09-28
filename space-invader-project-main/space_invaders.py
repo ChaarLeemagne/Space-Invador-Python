@@ -17,7 +17,7 @@ pygame.display.set_icon(programIcon)
 # chargement de l'image de fond
 fond = pygame.image.load('background.png')
 fond = pygame.transform.scale(fond, (800, 600))
-fond2 = pygame.image.load('background2.jpg')
+fond2 = pygame.image.load('background2.png')
 fond2 = pygame.transform.scale(fond2, (800, 600))
 
 # Affichage d'un texte en hat à gauche de l'écran avec le score du joueur
@@ -43,6 +43,7 @@ for i in range(2) :
         tir2 = space.Balle(player)
         tir2.etat = "chargee"
         listeBalles.append(tir2)
+        print(tir2)
         
     if i == 1:
         tir3 = space.Balle(player)
@@ -86,9 +87,6 @@ a = True
 clock.tick(90)
 while a :
     screen.blit(fond2, (0, 0))
-    over_text3 = font.render("Press Space For Start", 1, (255, 255, 255))
-    text_rect3 = over_text3.get_rect(center=(400, 300))
-    screen.blit(over_text3, text_rect3)
     ascenseur.play()
     ascenseur.set_volume(0.2)
     for event in pygame.event.get():# parcours de tous les event pygame dans cette fenêtre
@@ -129,7 +127,7 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
         if event.type == pygame.QUIT:  # si l'événement est le clic sur la fermeture de la fenêtre
             running = False  # running est sur False
             sys.exit()  # pour fermer correctement
-        if player.deplacer() == True or player.score < -100:
+        if player.deplacer() == True or player.score < -10:
             if event.type == pygame.KEYDOWN:  # si une touche a été tapée KEYUP quand on relache la touche
                 if event.key == pygame.K_SPACE:  # si la touche est la barre espace
                     player.Vlives = 5 # on redonne 5 lives 
@@ -157,20 +155,31 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
     # Gestions des collisions
     for ennemi in listeEnnemis:
         for tir in listeBalles:
-            if tir.toucher(ennemi,player):
-                ennemi.disparaitre()
-                player.marquer()
+            if tir == tir2 :
+                a = "2"
+                if tir.toucher(ennemi,player,a):
+                    ennemi.disparaitre()
+                    player.marquer()
+            if tir == tir3 :
+                a= "3"
+                if tir.toucher(ennemi,player,a):
+                    ennemi.disparaitre()
+                    player.marquer()
             # si l'ennemi touche le joueur on perd 10 sur la variable player.score
-            if ennemi.touchPlayer(player):
-                ennemi.disparaitre()
+        if ennemi.touchPlayer(player):
+            ennemi.disparaitre()
     
     # placement des objets
     # le joueur
     player.deplacer()
     screen.blit(player.image, [player.position, 500])  # appel de la fonction qui dessine le vaisseau du joueur
     for tir in listeBalles :
-        tir.bouger()
-        screen.blit(tir.image,[tir.depart, tir.hauteur])
+        if tir == tir2 :
+            tir.bouger()
+            screen.blit(tir.image,[tir.depart, tir.hauteur])
+        if tir == tir3 :
+            tir.bouger()
+            screen.blit(tir.image,[tir.depart-45, tir.hauteur])
 
     # les ennemis
     for ennemi in listeEnnemis:

@@ -52,14 +52,14 @@ class Joueur:  # classe pour créer le vaisseau du joueur
         Fonction qui permet de marquer un point
         :return:
         """
-        self.score = self.score + 2
+        self.score = self.score + 5
 
     def demarquer(self):
         """
         Fonction qui permet de démarquer un point
         :return:
         """
-        self.score = self.score - 5
+        self.score = self.score - 2
 
 class Balle:  # classe pour créer la balle
     def __init__(self, player):
@@ -71,7 +71,7 @@ class Balle:  # classe pour créer la balle
         self.depart = player.position + 16
         self.hauteur = 492
         self.image = pygame.image.load('balle.png')
-        self.image = pygame.transform.scale(self.image, (120, 60))
+        self.image = pygame.transform.scale(self.image, (90, 75))
         self.etat = "chargee"
         self.vitesse = 7
         
@@ -95,7 +95,7 @@ class Balle:  # classe pour créer la balle
             self.hauteur = 492
             pass
         
-    def toucher(self, vaisseau, player):
+    def toucher(self, vaisseau, player, a):
         """
         Fonction qui permet de savoir si la balle touche un ennemi
         :param vaisseau : vaisseau ennemi
@@ -107,12 +107,22 @@ class Balle:  # classe pour créer la balle
             return True
         """
         if self.etat == "tiree" :
-            if (math.fabs(self.depart - vaisseau.depart) < 40) and (math.fabs(self.hauteur - vaisseau.hauteur) < 40):
-                bruitage2 = pygame.mixer.Sound("explosion.wav")
-                bruitage2.play()
-                bruitage2.set_volume(0.1)
-                player.Vlives += 1
-                return True
+            if a == "2" :
+                if (math.fabs(self.depart - vaisseau.depart) < 40) and (math.fabs(self.hauteur - vaisseau.hauteur) < 40):
+                    bruitage2 = pygame.mixer.Sound("explosion.wav")
+                    bruitage2.play()
+                    bruitage2.set_volume(0.1)
+                    if vaisseau.type == 2 or vaisseau.type == 3 :
+                        player.Vlives += 1
+                    return True
+            if a == "3" :
+                if (math.fabs(self.depart - vaisseau.depart) < 80) and (math.fabs(self.hauteur - vaisseau.hauteur) < 40):
+                    bruitage2 = pygame.mixer.Sound("explosion.wav")
+                    bruitage2.play()
+                    bruitage2.set_volume(0.1)
+                    if vaisseau.type == 2 or vaisseau.type == 3 :
+                        player.Vlives += 1
+                    return True
         else :
             if (math.fabs(self.depart - vaisseau.depart) < 40) and (math.fabs(self.hauteur - vaisseau.hauteur) < 40):
                 vaisseau.disparaitre()
@@ -123,7 +133,7 @@ class Balle:  # classe pour créer la balle
                 player.score -=10
 
 class Ennemi:
-    NbEnnemis = random.randint(2, 6)
+    NbEnnemis = random.randint(2, 3)
 
     def __init__(self):
         """
@@ -140,6 +150,10 @@ class Ennemi:
             self.image = pygame.image.load('invader2.png')
             self.image = pygame.transform.scale(self.image, (80, 90))
             self.vitesse = 2
+        elif self.type == 3:
+            self.image = pygame.image.load('invader3.png')
+            self.image = pygame.transform.scale(self.image, (80, 90))
+            self.vitesse = 1
 
     def avancer(self):
         """
@@ -160,7 +174,7 @@ class Ennemi:
         if verif == False :
             self.depart = random.randint(1, 700)
             self.hauteur = 10
-            self.type = random.randint(1, 2)
+            self.type = random.randint(1, 3)
             if self.type == 1:
                 self.image = pygame.image.load('invader1.png')
                 self.image = pygame.transform.scale(self.image, (80, 90))
@@ -169,6 +183,10 @@ class Ennemi:
                 self.image = pygame.image.load('invader2.png')
                 self.image = pygame.transform.scale(self.image, (80, 90))
                 self.vitesse = 2
+            elif self.type == 3:
+                self.image = pygame.image.load('invader3.png')
+                self.image = pygame.transform.scale(self.image, (80, 90))
+                self.vitesse = 1
         else :
             pass   
     def touchPlayer(self, player):
@@ -192,11 +210,11 @@ class AfficherVlives():
 
     def affiche(self, player):
         font.render({player.Vlives}, True, (255, 0, 255))
-        
+"""        
 class EasterEgg():
     def sprite1(player, tir):
         if player.score == 2 :
             player.image = pygame.image.load('vaisseauS.png')
             player.image = pygame.transform.scale(player.image, (80, 60))
             tir.image = pygame.image.load('balleS.png')
-            tir.image = pygame.transform.scale(tir.image, (80, 40))            
+            tir.image = pygame.transform.scale(tir.image, (80, 40))           """ 
