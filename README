@@ -15,7 +15,7 @@ Le jeu
 4. Si le vaisseau ennemi est touché, il disparaît.
 5. Dès qu'un vaisseau ennemi arrive en bas de la fenêtre graphique ou est détruit, un nouveau vaisseau ennemi apparaît en haut de la fenêtre graphique.
 6. « Si le vaisseau ennemi percute le vaisseau du joueur, celui-ci explose et disparaît : c'est la fin de la partie. » 
-    - [ ] A FAIRE
+    - [X] A FAIRE / fait mais on perd trop facilement
 7. Améliorations possibles :
     * affichage du score du joueur X
     * le joueur a plusieurs vies X
