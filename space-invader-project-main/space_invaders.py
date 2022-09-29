@@ -84,7 +84,7 @@ coeur = pygame.transform.scale(coeur, (40, 45))
 running = False  # variable pour laisser la fenêtre ouverte
 verif = True
 a = True
-clock.tick(90)
+clock.tick(120)
 while a :
     screen.blit(fond2, (0, 0))
     ascenseur.play()
@@ -112,9 +112,9 @@ while running:  # boucle infinie pour laisser la fenêtre ouverte
     text2 = font.render(f"{player.Vlives}", 1, (255, 255, 255))
     screen.blit(text2, [640, 10])
     screen.blit(coeur, (700, 10))
-    """if player.score == 2 :
-        for tir in listeBalles : 
-            space.EasterEgg.sprite1(player, tir)"""
+    if player.score >= 100 :
+        for tir in listeBalles :
+            space.EasterEgg.sprite1(player, tir)
 
     if player.deplacer() == True or player.score < -100:
             game_over_text()

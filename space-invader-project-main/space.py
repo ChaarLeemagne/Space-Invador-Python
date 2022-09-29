@@ -210,11 +210,11 @@ class AfficherVlives():
 
     def affiche(self, player):
         font.render({player.Vlives}, True, (255, 0, 255))
-"""        
+      
 class EasterEgg():
     def sprite1(player, tir):
-        if player.score == 2 :
+        if player.score == 100 :
             player.image = pygame.image.load('vaisseauS.png')
-            player.image = pygame.transform.scale(player.image, (80, 60))
+            player.image = pygame.transform.scale(player.image, (120, 100))
             tir.image = pygame.image.load('balleS.png')
-            tir.image = pygame.transform.scale(tir.image, (80, 40))           """ 
+            tir.image = pygame.transform.scale(tir.image, (40, 20)) 
